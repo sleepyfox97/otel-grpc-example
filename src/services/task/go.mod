@@ -1,6 +1,6 @@
 module github.com/sleepyfox97/otel-grpc-example/src/services/task
 
-go 1.21.4
+go 1.20
 
 replace github.com/sleepyfox97/otel-grpc-example/src/services/uid => ../uid
 

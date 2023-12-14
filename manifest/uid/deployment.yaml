@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: uid
+  name: uid
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: uid
+  template:
+    metadata:
+      labels:
+        app: uid
+    spec:
+      containers:
+        - image: uid
+          name: uid
+          ports:
+            - containerPort: 5051
+              name: grpc
+          livenessProbe:
+            grpc:
+              port: 5051
+            initialDelaySeconds: 10
+          readinessProbe:
+            grpc:
+              port: 5051
+            initialDelaySeconds: 5
+          resources:
+            limits:
+              cpu: 250m
+              memory: 0.5Gi
+            requests:
+              cpu: 250m
+              memory: 0.5Gi

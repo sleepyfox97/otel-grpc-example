@@ -12,7 +12,7 @@ var (
 )
 
 func UidClient(ctx context.Context) (*string, error) {
-	address := "localhost:5051"
+	address := "uid.default.svc.cluster.local:5051"
 	conn, err := grpc.Dial(
 		address,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),

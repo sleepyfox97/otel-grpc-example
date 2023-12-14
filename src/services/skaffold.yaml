@@ -1,0 +1,44 @@
+apiVersion: skaffold/v3
+kind: Config
+build:
+  local:
+    push: false
+  artifacts:
+    - image: uid
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          SERVICE_NAME: uid
+    - image: task
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          SERVICE_NAME: task
+manifests:
+  rawYaml:
+    - ../../manifest/uid/deployment.yaml
+    - ../../manifest/uid/service.yaml
+    - ../../manifest/task/deployment.yaml
+    - ../../manifest/task/service.yaml
+    - ../../manifest/zipkin/deployment.yaml
+    - ../../manifest/zipkin/service.yaml
+
+
+portForward:
+  - resourceType: service
+    resourceName: uid
+    namespace: default
+    port: 5051
+    localPort: 55051
+  - resourceType: service
+    resourceName: task
+    namespace: default
+    port: 5050
+    localPort: 55050
+  - resourceType: service
+    resourceName: zipkin
+    namespace: default
+    port: 9411
+    localPort: 59411

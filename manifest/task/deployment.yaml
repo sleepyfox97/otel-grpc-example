@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: task
+  name: task
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: task
+  template:
+    metadata:
+      labels:
+        app: task
+    spec:
+      containers:
+        - image: task
+          name: task
+          ports:
+            - containerPort: 5050
+              name: grpc
+          livenessProbe:
+            grpc:
+              port: 5050
+            initialDelaySeconds: 10
+          readinessProbe:
+            grpc:
+              port: 5050
+            initialDelaySeconds: 5
+          resources:
+            limits:
+              cpu: 250m
+              memory: 0.5Gi
+            requests:
+              cpu: 250m
+              memory: 0.5Gi

@@ -6,7 +6,9 @@ import (
 	"github.com/sleepyfox97/otel-grpc-example/src/services/uid/api"
 	"github.com/sleepyfox97/otel-grpc-example/src/services/uid/handler"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/health"
 	_ "google.golang.org/grpc/health"
+	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
 	_ "google.golang.org/grpc/reflection"
 	"log"
@@ -25,6 +27,10 @@ func main() {
 	s := grpc.NewServer()
 	h, err := handler.NewService()
 	api.RegisterUIDServiceServer(s, h)
+
+	healthSrv := health.NewServer()
+	healthpb.RegisterHealthServer(s, healthSrv)
+	healthSrv.SetServingStatus("uid", healthpb.HealthCheckResponse_SERVING)
 
 	reflection.Register(s)
 

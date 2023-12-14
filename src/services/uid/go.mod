@@ -1,6 +1,6 @@
 module github.com/sleepyfox97/otel-grpc-example/src/services/uid
 
-go 1.21.4
+go 1.20
 
 require (
 	github.com/google/uuid v1.5.0
