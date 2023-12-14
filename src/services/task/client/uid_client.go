@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	uid "github.com/sleepyfox97/otel-grpc-example/src/services/uid/api"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -16,7 +17,7 @@ func UidClient(ctx context.Context) (*string, error) {
 	conn, err := grpc.Dial(
 		address,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
+		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
 	)
 	if err != nil {
 		return nil, err

@@ -1,10 +1,14 @@
 package main
 
 import (
+	"context"
 	_ "context"
 	"fmt"
 	"github.com/sleepyfox97/otel-grpc-example/src/services/task/api"
 	"github.com/sleepyfox97/otel-grpc-example/src/services/task/handler"
+	"github.com/sleepyfox97/otel-grpc-example/src/services/task/tracer"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+	"go.opentelemetry.io/otel/trace"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	_ "google.golang.org/grpc/health"
@@ -24,7 +28,20 @@ func main() {
 		panic(err)
 	}
 
-	s := grpc.NewServer()
+	ctx := context.Background()
+	//tracerを呼び出す
+	tr, shutdown := tracer.TraceSetting("task")
+	defer func() {
+		if err = shutdown(ctx); err != nil {
+			log.Fatal("failed to shutdown TracerProvider: %w", err)
+		}
+	}()
+	_, span := tr.Start(ctx, "task", trace.WithSpanKind(trace.SpanKindServer))
+	defer span.End()
+
+	s := grpc.NewServer(
+		grpc.StatsHandler(otelgrpc.NewServerHandler()),
+	)
 	h, err := handler.NewService()
 	api.RegisterTaskServiceServer(s, h)
 
@@ -36,7 +53,7 @@ func main() {
 
 	go func() {
 		log.Printf("start gRPC server port: %v", port)
-		err := s.Serve(listener)
+		err = s.Serve(listener)
 		if err != nil {
 			return
 		}
