@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package moa.api.uid.v1;
+
+option go_package = "github.com/sleepyfox97/otel-grpc-example/src/services/uid/api";
+
+
+service UIDService {
+  rpc Generate(GenerateRequest) returns (GenerateResponse) {
+  }
+}
+
+message GenerateResponse {
+  string ID = 1;
+}
+
+message GenerateRequest {
+}

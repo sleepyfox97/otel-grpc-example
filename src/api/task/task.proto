@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package moa.api.task.v1;
+
+option go_package = "github.com/sleepyfox97/otel-grpc-example/src/services/task/api";
+
+
+service TaskService {
+  rpc Create (CreateRequest) returns (CreateResponse) {
+  }
+}
+
+message Task {
+  string id = 1;
+  string text = 2;
+  bool done = 3;
+  string doneAt = 4;
+}
+
+message CreateRequest {
+  Task task = 1;
+}
+
+message CreateResponse {
+  string id = 1;
+}
