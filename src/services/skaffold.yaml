@@ -1,8 +1,9 @@
 apiVersion: skaffold/v3
 kind: Config
 build:
-  local:
-    push: false
+  platforms:
+    - "linux/amd64"
+    - "linux/arm64"
   artifacts:
     - image: uid
       context: .
@@ -20,10 +21,12 @@ manifests:
   rawYaml:
     - ../../manifest/uid/deployment.yaml
     - ../../manifest/uid/service.yaml
+    - ../../manifest/uid/service-account.yaml
     - ../../manifest/task/deployment.yaml
     - ../../manifest/task/service.yaml
-    - ../../manifest/zipkin/deployment.yaml
-    - ../../manifest/zipkin/service.yaml
+    - ../../manifest/task/service-account.yaml
+#    - ../../manifest/zipkin/deployment.yaml
+#    - ../../manifest/zipkin/service.yaml
 
 
 portForward:
@@ -37,8 +40,8 @@ portForward:
     namespace: default
     port: 5050
     localPort: 55050
-  - resourceType: service
-    resourceName: zipkin
-    namespace: default
-    port: 9411
-    localPort: 59411
+#  - resourceType: service
+#    resourceName: zipkin
+#    namespace: default
+#    port: 9411
+#    localPort: 59411
