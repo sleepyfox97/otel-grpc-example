@@ -14,6 +14,7 @@ spec:
       labels:
         app: task
     spec:
+      serviceAccountName: task-service
       containers:
         - image: task
           name: task

@@ -19,7 +19,7 @@ func TraceSetting(service string) (trace.Tracer, func(context.Context) error) {
 
 	var shutdown func(context.Context) error
 	var err error
-	shutdown, err = zipkinTracer(service)
+	shutdown, err = googleTracer(service)
 	if err != nil {
 		log.Fatal(err)
 	}
